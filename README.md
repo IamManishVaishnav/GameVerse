@@ -1,12 +1,45 @@
-# React + Vite
+# 🎮 Gameverse
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Gameverse is a React-based game discovery web app that allows users to explore games by category using the RAWG API. It also features user authentication via Clerk and plans to include a personal game library.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🔍 Game discovery via RAWG API
+- 📂 Category-based filtering
+- ✅ Clerk authentication (working)
+- 🔁 Infinite scroll for smoother game browsing
+- ❤️ Add to library feature (in progress)
 
-## Expanding the ESLint configuration
+## ⚠️ Current Status
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- ✅ **Clerk Authentication**: Working as expected
+- ✅ **RAWG API Integration**: Successfully fetching game data
+- ❌ **Filters**: Not working (UI present but not functional)
+- ❌ **Library**: Not working (saving to personal library is not implemented yet)
+
+## 🛠 Tech Stack
+
+- React
+- Redux
+- Clerk (Auth)
+- RAWG API
+- Tailwind CSS
+
+## 📌 To Do
+
+- [ ] Fix filtering functionality
+- [ ] Implement library feature for saving favorite games
+- [ ] Improve UI/UX
+- [ ] Add loading states and error handling
+
+## 📸 Screenshots
+
+![alt text]({BDC59418-30CF-4C93-A4D2-94536DC00116}.png)
+![alt text]({9E0A1B71-0594-42BF-99D9-32EBAD6CFD18}.png)
+
+## 🧑‍💻 Author
+
+Created with ❤️ by Manish
+
+---
+
