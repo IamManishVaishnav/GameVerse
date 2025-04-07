@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import GameDetail from './pages/gamedetail';
-import Library from './pages/library';
+import Library from "./pages/Library";
 import Navbar from './components/Navbar';
 
 function App() {

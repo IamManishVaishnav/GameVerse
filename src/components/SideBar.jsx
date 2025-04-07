@@ -1,30 +1,53 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleCategory, toggleTag, resetFilters } from '../redux/FilterSlice';
 import { toast } from 'react-hot-toast';
 
-const SideBar = ({ filters, setFilters, allCategories = [], allTags = [] }) => {
-  const [tempCategory, setTempCategory] = useState(filters.category);
-  const [tempTags, setTempTags] = useState(filters.tags);
+const SideBar = ({ allCategories = [], allTags = [] }) => {
+  const dispatch = useDispatch();
+  const { selectedCategories, selectedTags } = useSelector((state) => state.filters);
 
-  useEffect(() => {
-    setTempCategory(filters.category);
-    setTempTags(filters.tags);
-  }, [filters]);
+  const [localCategories, setLocalCategories] = useState(selectedCategories);
+  const [localTags, setLocalTags] = useState(selectedTags);
 
-  const handleTagChange = (tag) => {
-    if (tempTags.includes(tag)) {
-      setTempTags(tempTags.filter((t) => t !== tag));
-    } else {
-      setTempTags([...tempTags, tag]);
-    }
+  const handleCategoryChange = (category) => {
+    setLocalCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category]
+    );
   };
 
-  const handleApplyFilters = () => {
-    if (!tempCategory && tempTags.length === 0) {
-      toast.error("Please select a category or tags to apply filter.");
-    } else {
-      setFilters({ category: tempCategory, tags: tempTags });
-      toast.success("Filters Applied!");
-    }
+  const handleTagChange = (tag) => {
+    setLocalTags((prev) =>
+      prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
+    );
+  };
+
+  const handleApply = () => {
+    // Dispatch all selected filters
+    localCategories.forEach((cat) => {
+      if (!selectedCategories.includes(cat)) dispatch(toggleCategory(cat));
+    });
+    selectedCategories.forEach((cat) => {
+      if (!localCategories.includes(cat)) dispatch(toggleCategory(cat));
+    });
+
+    localTags.forEach((tag) => {
+      if (!selectedTags.includes(tag)) dispatch(toggleTag(tag));
+    });
+    selectedTags.forEach((tag) => {
+      if (!localTags.includes(tag)) dispatch(toggleTag(tag));
+    });
+
+    toast.success("Filters applied!");
+  };
+
+  const handleReset = () => {
+    dispatch(resetFilters());
+    setLocalCategories([]);
+    setLocalTags([]);
+    toast.success("Filters Reset!");
   };
 
   return (
@@ -32,10 +55,10 @@ const SideBar = ({ filters, setFilters, allCategories = [], allTags = [] }) => {
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold">Filters</h2>
         <button
-          onClick={handleApplyFilters}
-          className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-sm rounded"
+          onClick={handleReset}
+          className="px-3 py-1 bg-red-600 hover:bg-red-700 text-sm rounded"
         >
-          Apply
+          Reset
         </button>
       </div>
 
@@ -44,34 +67,23 @@ const SideBar = ({ filters, setFilters, allCategories = [], allTags = [] }) => {
         {allCategories.map((cat) => (
           <label key={cat} className="block mb-1">
             <input
-              type="radio"
-              name="category"
-              checked={tempCategory === cat}
-              onChange={() => setTempCategory(cat)}
+              type="checkbox"
+              checked={localCategories.includes(cat)}
+              onChange={() => handleCategoryChange(cat)}
               className="mr-2"
             />
             {cat}
           </label>
         ))}
-        <label className="block">
-          <input
-            type="radio"
-            name="category"
-            checked={tempCategory === ''}
-            onChange={() => setTempCategory('')}
-            className="mr-2"
-          />
-          All
-        </label>
       </div>
 
-      <div>
+      <div className="mb-4">
         <h3 className="font-semibold mb-2">Tags</h3>
         {allTags.map((tag) => (
           <label key={tag} className="block mb-1">
             <input
               type="checkbox"
-              checked={tempTags.includes(tag)}
+              checked={localTags.includes(tag)}
               onChange={() => handleTagChange(tag)}
               className="mr-2"
             />
@@ -79,6 +91,14 @@ const SideBar = ({ filters, setFilters, allCategories = [], allTags = [] }) => {
           </label>
         ))}
       </div>
+
+      {/* ✅ Apply Button */}
+      <button
+        onClick={handleApply}
+        className="w-full py-2 bg-green-600 hover:bg-green-700 rounded mt-4"
+      >
+        Apply Filters
+      </button>
     </aside>
   );
 };
